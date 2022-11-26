@@ -1,0 +1,36 @@
+version: '3.3'
+
+services:
+
+  srv:
+    restart: always
+    image: niko-lab/onec-server:8.3.20.2184
+    # hostname: srv-1c-8320
+    environment:
+      - "SRV1CV8_DEBUG=1"
+    ports:
+      - "1640-1641:1540-1541"
+      - "1660-1699:1560-1599"
+    volumes:
+      - srv_data:/home/usr1cv8/.1cv8
+      - srv_log:/var/log/1C
+    networks:
+      - back_net
+
+  db:
+    restart: always
+    image: rsyuzyov/docker-postgresql-pro-1c:latest
+    ports:
+      - "${PG_PORT:-5432}:5432"
+    volumes:
+      - db_data:/var/lib/postgresql
+    networks:
+      - back_net
+
+volumes:
+  srv_data: {}
+  srv_log: {}
+  db_data: {}
+
+networks:
+  back_net: {}
